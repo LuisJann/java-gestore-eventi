@@ -1,11 +1,12 @@
 package org.oop.events;
 
 import java.text.DateFormat;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 
 public class Event {
     private String title;
-    private LocalDate date = LocalDate.now();
+    private LocalDate date;
     private int numSeats;
     private int reservedSeats = 0;
 
@@ -26,11 +27,18 @@ public class Event {
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        if (title.isEmpty()) {
+            throw new RuntimeException("Devi inserire un titolo");
+        }
+            this.title = title;
     }
 
     public void setDate(LocalDate date) {
-        this.date = date;
+        if (date.isAfter(LocalDate.now()) || date.isEqual(LocalDate.now())) {
+            this.date = date;
+        } else {
+            throw new DateTimeException("L'evento non può contenere una data passata");
+        }
     }
 
     public Event(String title, LocalDate date, int numSeats, int reservedSeats) {
