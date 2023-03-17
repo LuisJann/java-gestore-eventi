@@ -27,7 +27,7 @@ public class Event {
     }
 
     public void setTitle(String title) {
-        if (title.isEmpty()) {
+        if (title.trim().isEmpty()) {
             throw new RuntimeException("Devi inserire un titolo");
         }
             this.title = title;
