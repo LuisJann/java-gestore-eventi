@@ -5,6 +5,8 @@ import java.text.DecimalFormat;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -13,6 +15,8 @@ public class Main {
         DecimalFormat df = new DecimalFormat("##0.00€");
         Event event = new Event("", LocalDate.now(),200,0);
         Concert concert = new Concert("",LocalDate.now(),200,0, LocalTime.now(),new BigDecimal("5.00"));
+        ArrayList<Event> eventList = new ArrayList<>();
+        EventProgram eventProgram = new EventProgram("",eventList);
         int n = 0;
         boolean check = false;
 
@@ -38,48 +42,66 @@ public class Main {
             System.exit(0);
         }
 
+        eventList.add(event);
 
-        while (!check){
-            System.out.println("I posti disponibili sono: " + (event.getNumSeats() - event.getReservedSeats()) );
+
+        while (!check) {
+            System.out.println("I posti disponibili sono: " + (event.getNumSeats() - event.getReservedSeats()));
             System.out.println("Al momento ci sono: " + event.getReservedSeats() + " prenotazioni");
 
             System.out.println("-----------------------------------");
             System.out.println("Se vuoi prenotare un posto premi 1");
             System.out.println("Se vuoi cancellare la prenotazione di un posto premi 2");
-            System.out.println("Per uscire premi 3");
+            System.out.println("Per conoscere gli eventi presenti in una certa data premi 3");
+            System.out.println("Per uscire premi 4");
 
             int userChoice = scan.nextInt();
 
-            switch (userChoice){
-                case 1 ->{
-                    System.out.println("Quanti posti vuoi prenotare? ");
-                    n = scan.nextInt();
-                    if (n > 0){
-                        for (int i = 0; i < n; i++) {
-                        event.booking();
+
+                switch (userChoice) {
+                    case 1 -> {
+                        System.out.println("Quanti posti vuoi prenotare? ");
+                        n = scan.nextInt();
+                        if (n > 0) {
+                            for (int i = 0; i < n; i++) {
+                                event.booking();
+                            }
+                        } else {
+                            System.out.println("Inserisci un numero maggiore di 0");
                         }
-                    }else {
-                        System.out.println("Inserisci un numero maggiore di 0");
                     }
-                }
-                case 2 ->{
-                    System.out.println("Quante prenotazioni vuoi cancellare?");
-                    n = scan.nextInt();
-                    if (n > 0){
-                        for (int i = 0; i < n; i++) {
-                        event.canceling();
+                    case 2 -> {
+                        System.out.println("Quante prenotazioni vuoi cancellare?");
+                        n = scan.nextInt();
+                        if (n > 0) {
+                            for (int i = 0; i < n; i++) {
+                                event.canceling();
+                            }
+                        } else {
+                            System.out.println("Inserisci un numero maggiore di 0");
                         }
-                    }else {
-                        System.out.println("Inserisci un numero maggiore di 0");
                     }
-                }
-                case 3->{
-                    System.out.println("exit");
-                    System.out.println("Il totale che dovrai pagare al botteghino è: " + df.format((long) Integer.parseInt(String.valueOf(concert.getPrice())) * event.getReservedSeats()));
-                    check = true;
+                    case 3 -> {
+                        System.out.println("Che data vuoi cercare? ");
+                        String userSearch = scan.next();
+                        List<Event> result = eventProgram.eventInDate(LocalDate.parse(userSearch));
+                        if (!result.isEmpty()) {
+                            System.out.println(result);
+                            eventProgram.eventListSize();
+                        } else {
+                            System.out.println("Non ci sono eventi in quella data");
+                        }
+                    }
+                    case 4 -> {
+                        System.out.println("exit");
+                        System.out.println("Il totale che dovrai pagare al botteghino è: " + df.format((long) Integer.parseInt(String.valueOf(concert.getPrice())) * event.getReservedSeats()));
+                        check = true;
+                    }
                 }
             }
-        }
-            System.out.println(concert);
+
+
+        System.out.println(concert);
+        System.out.println(eventList);
     }
 }

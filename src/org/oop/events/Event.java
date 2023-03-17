@@ -26,6 +26,7 @@ public class Event {
         return reservedSeats;
     }
 
+
     public void setTitle(String title) {
         if (title.trim().isEmpty()) {
             throw new RuntimeException("Devi inserire un titolo");
